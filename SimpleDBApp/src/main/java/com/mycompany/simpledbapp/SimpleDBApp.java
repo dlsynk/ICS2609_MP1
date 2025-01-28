@@ -79,25 +79,5 @@ public class SimpleDBApp {
         else return null;
     }
 
-    public static void main(String[] args) {
-        String directPathToDb = "C:\\Users\\User\\Documents\\ARTHURFOLDERHIGUYS\\SimpleDBApp\\AccountsDB";
-        SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
-        
-        frame myFrame = new frame();
-        myFrame.setVisible(true);
-        
-        //String username = myFrame.jTextField1.getText();
-        
-//        try {
-//            ResultSet rs = jdbc.getAll();
-//            while(rs.next()) {
-//                System.out.println(rs.getString("username") + rs.getString("password"));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            System.err.println(e.toString());
-//            System.err.println("");
-//        }
-    }
 }
 
