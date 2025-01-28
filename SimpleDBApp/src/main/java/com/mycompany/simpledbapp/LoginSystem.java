@@ -5,12 +5,14 @@
 package com.mycompany.simpledbapp;
 
 import java.awt.BorderLayout;
+import java.sql.*;
 import javax.swing.*;
 
 public class LoginSystem {
+    String directPathToDb = "C:\\Users\\Niko\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
+    SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
+    
     private static int attempts = 0;
-    private static final String CORRECT_USERNAME = "admin";
-    private static final String CORRECT_PASSWORD = "password123";
     private JFrame frame;
 
     public void openLogin() {
@@ -62,16 +64,41 @@ public class LoginSystem {
     }
 
     private void validateLogin(String username, String password) {
-        if (username.equals(CORRECT_USERNAME) && password.equals(CORRECT_PASSWORD)) {
-            JOptionPane.showMessageDialog(frame, "Login Successful! Welcome!");
-            attempts = 0;
-        } else {
-            attempts++;
-            if (attempts >= 3) {
-                forceClose();
-            } else {
-                JOptionPane.showMessageDialog(frame, "Login Failed! Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+        try {
+            // Get all users from the database
+            ResultSet rs = jdbc.getAll();
+
+            // Flag to track whether the login is successful
+            boolean loginSuccess = false;
+
+            // Loop through the ResultSet to check for the username and password match
+            while (rs.next()) {
+                String dbUsername = rs.getString("username");
+                String dbPassword = rs.getString("password");
+
+                // If username and password match, set loginSuccess to true
+                if (dbUsername.equals(username) && dbPassword.equals(password)) {
+                    loginSuccess = true;
+                    break; // Stop the loop if credentials are correct
+                }
             }
+
+            // Check login result
+            if (loginSuccess) {
+                JOptionPane.showMessageDialog(frame, "Login Successful! Welcome!");
+                attempts = 0; // Reset login attempts on success
+            } else {
+                attempts++;
+                if (attempts >= 3) {
+                    forceClose(); // Close the app after 3 failed attempts
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Login Failed! Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "An error occurred while validating login.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
