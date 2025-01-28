@@ -6,10 +6,13 @@ package com.mycompany.simpledbapp;
 
 import java.awt.BorderLayout;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 public class LoginSystem {
-    String directPathToDb = "C:\\Users\\Niko\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
+    static boolean loginSuccess = false;
+    String directPathToDb = "E:\\Random Files\\ICS2609\\ICS2609_Projects\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
     SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
     
     private static int attempts = 0;
@@ -67,9 +70,9 @@ public class LoginSystem {
         try {
             // Get all users from the database
             ResultSet rs = jdbc.getAll();
+            
 
-            // Flag to track whether the login is successful
-            boolean loginSuccess = false;
+            
 
             // Loop through the ResultSet to check for the username and password match
             while (rs.next()) {
@@ -85,8 +88,17 @@ public class LoginSystem {
 
             // Check login result
             if (loginSuccess) {
-                JOptionPane.showMessageDialog(frame, "Login Successful! Welcome!");
+                JOptionPane.showMessageDialog(frame, "Login Successful!");
+                frame.dispose();
                 attempts = 0; // Reset login attempts on success
+                
+                if (rs.getString("user_role").equals("admin")) {
+                    adminLogin al = new adminLogin(userList());
+                    al.setVisible(true);
+                } else if (rs.getString("user_role").equals("user")) {
+                    userLogin ul = new userLogin();
+                    ul.setVisible(true);
+                }
             } else {
                 attempts++;
                 if (attempts >= 3) {
@@ -106,5 +118,31 @@ public class LoginSystem {
         JOptionPane.showMessageDialog(frame, "Too many failed attempts. The application will now close.", "Error", JOptionPane.ERROR_MESSAGE);
         System.exit(0);
     }
+    
+    public List userList() {
+        List<String> users = new ArrayList<>();
+        
+        
+        try {
+            ResultSet rs = jdbc.getAll();
+            
+            while(rs.next()) {
+                if (rs.getString("user_role").equals("user")) {
+                    users.add(rs.getString("username"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "An error occurred while validating login.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return users;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new LoginSystem().openLogin());
+    }
+    
+    
 
 }

@@ -4,7 +4,7 @@
  */
 package com.mycompany.simpledbapp;
 
-import gui.frame;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,11 +14,13 @@ import java.sql.SQLException;
  */
 public class MainApp {
     public static void main(String[] args) {
-        String directPathToDb = "C:\\Users\\Niko\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
+        String directPathToDb = "E:\\Random Files\\ICS2609\\ICS2609_Projects\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
         SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
         
         LoginSystem ls = new LoginSystem();
         ls.openLogin();
+        
+        
         
         try {
             ResultSet rs = jdbc.getAll();

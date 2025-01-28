@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.*;
-import gui.frame;
+
 
 /**
  *
@@ -28,7 +28,6 @@ public class SimpleDBApp {
         public String getUsername() {
             return username;
         }
-
         public void setUsername(String username) {
             this.username = username;
         }
