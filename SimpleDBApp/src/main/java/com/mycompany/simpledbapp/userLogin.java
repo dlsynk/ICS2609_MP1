@@ -15,6 +15,7 @@ public class userLogin extends javax.swing.JFrame {
      */
     public userLogin() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

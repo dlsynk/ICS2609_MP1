@@ -13,30 +13,24 @@ public class adminLogin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        String[] column = {"Name"};
+        String[] column = {"Users"};
 
-        // Create the table model
         DefaultTableModel tableModel = new DefaultTableModel(column, 0);
 
-        // Add user data to the table model
         int index = 0;
         while (index < users.size()) {
             String user = users.get(index);
-            tableModel.addRow(new Object[]{user}); // Add each string as a row
+            tableModel.addRow(new Object[]{user}); 
             index++;
         }
 
-        // Create the JTable and set its model
         JTable userTable = new JTable(tableModel);
 
-        // Set some optional customizations
         userTable.setFillsViewportHeight(true);
         userTable.setAutoCreateRowSorter(true); // Enable sorting
 
-        // Wrap the table in a JScrollPane
         JScrollPane scrollPane = new JScrollPane(userTable);
 
-        // Add the scroll pane to the frame
         add(scrollPane, BorderLayout.CENTER);
         
         javax.swing.JButton jButton1 = new javax.swing.JButton();
@@ -48,14 +42,9 @@ public class adminLogin extends JFrame {
         });
         add(jButton1, BorderLayout.SOUTH);
         
-
-        // Make the frame visible
+        setLocationRelativeTo(null); 
         setResizable(false);
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-
     }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         

@@ -12,24 +12,22 @@ import javax.swing.*;
 
 public class LoginSystem {
     static boolean loginSuccess = false;
-    String directPathToDb = "E:\\Random Files\\ICS2609\\ICS2609_Projects\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
+    //PLEASE CHANGE TO FILE PATH OF AccountsDB IN YOUR DEVICE, THANK YOU <3
+    String directPathToDb = "C:\\Users\\Niko\\Downloads\\ICS2609_MP1-main\\ICS2609_MP1-main\\SimpleDBApp\\AccountsDB";
     SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
     
     private static int attempts = 0;
     private JFrame frame;
 
     public void openLogin() {
-        // Create the frame
         frame = new JFrame("Login System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(350, 180);
-        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.setLocationRelativeTo(null); 
 
-        // Create and add components
         JPanel panel = createLoginPanel();
         frame.add(panel);
 
-        // Set frame visibility
         frame.setVisible(true);
     }
 
@@ -38,27 +36,23 @@ public class LoginSystem {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Username
         JPanel usernamePanel = new JPanel(new BorderLayout());
         JLabel userLabel = new JLabel("Username: ");
         JTextField userText = new JTextField(20);
         usernamePanel.add(userLabel, BorderLayout.WEST);
         usernamePanel.add(userText, BorderLayout.CENTER);
 
-        // Password
         JPanel passwordPanel = new JPanel(new BorderLayout());
         JLabel passwordLabel = new JLabel("Password: ");
         JPasswordField passwordText = new JPasswordField(20);
         passwordPanel.add(passwordLabel, BorderLayout.WEST);
         passwordPanel.add(passwordText, BorderLayout.CENTER);
 
-        // Login Button
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(e -> validateLogin(userText.getText(), new String(passwordText.getPassword())));
 
-        // Add components to the main panel
         panel.add(usernamePanel);
-        panel.add(Box.createVerticalStrut(10)); // Add space between components
+        panel.add(Box.createVerticalStrut(10)); 
         panel.add(passwordPanel);
         panel.add(Box.createVerticalStrut(20));
         panel.add(loginButton);
@@ -67,47 +61,42 @@ public class LoginSystem {
     }
 
     private void validateLogin(String username, String password) {
+        loginSuccess = false; 
+        String userRole = null; 
+
         try {
-            // Get all users from the database
             ResultSet rs = jdbc.getAll();
-            
 
-            
-
-            // Loop through the ResultSet to check for the username and password match
             while (rs.next()) {
                 String dbUsername = rs.getString("username");
                 String dbPassword = rs.getString("password");
 
-                // If username and password match, set loginSuccess to true
                 if (dbUsername.equals(username) && dbPassword.equals(password)) {
                     loginSuccess = true;
-                    break; // Stop the loop if credentials are correct
+                    userRole = rs.getString("user_role");
+                    break;
                 }
             }
 
-            // Check login result
             if (loginSuccess) {
-                JOptionPane.showMessageDialog(frame, "Login Successful!");
                 frame.dispose();
-                attempts = 0; // Reset login attempts on success
-                
-                if (rs.getString("user_role").equals("admin")) {
+                attempts = 0;
+
+                if ("admin".equals(userRole)) {
                     adminLogin al = new adminLogin(userList());
                     al.setVisible(true);
-                } else if (rs.getString("user_role").equals("user")) {
+                } else if ("user".equals(userRole)) {
                     userLogin ul = new userLogin();
                     ul.setVisible(true);
                 }
             } else {
-                attempts++;
+                attempts++; 
                 if (attempts >= 3) {
-                    forceClose(); // Close the app after 3 failed attempts
+                    forceClose(); 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Login Failed! Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(frame, "An error occurred while validating login.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -121,8 +110,7 @@ public class LoginSystem {
     
     public List userList() {
         List<String> users = new ArrayList<>();
-        
-        
+
         try {
             ResultSet rs = jdbc.getAll();
             
