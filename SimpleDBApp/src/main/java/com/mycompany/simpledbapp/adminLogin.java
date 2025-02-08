@@ -15,24 +15,29 @@ public class adminLogin extends JFrame {
 
         String[] column = {"Users"};
 
-        DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+        DefaultTableModel tableModel = new DefaultTableModel(column, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
 
         int index = 0;
         while (index < users.size()) {
             String user = users.get(index);
-            tableModel.addRow(new Object[]{user}); 
+            tableModel.addRow(new Object[]{user});
             index++;
         }
 
         JTable userTable = new JTable(tableModel);
 
         userTable.setFillsViewportHeight(true);
-        userTable.setAutoCreateRowSorter(true); // Enable sorting
+        userTable.setAutoCreateRowSorter(true);
 
         JScrollPane scrollPane = new JScrollPane(userTable);
 
         add(scrollPane, BorderLayout.CENTER);
-        
+
         javax.swing.JButton jButton1 = new javax.swing.JButton();
         jButton1.setText("Logout");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -41,15 +46,15 @@ public class adminLogin extends JFrame {
             }
         });
         add(jButton1, BorderLayout.SOUTH);
-        
-        setLocationRelativeTo(null); 
+
+        setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
     }
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         dispose();
         LoginSystem ls = new LoginSystem();
         ls.openLogin();
-    }    
+    }
 }

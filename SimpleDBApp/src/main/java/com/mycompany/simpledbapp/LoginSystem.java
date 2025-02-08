@@ -4,7 +4,7 @@
  */
 package com.mycompany.simpledbapp;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class LoginSystem {
     static boolean usernameFound = false;
     static boolean wrongPassword = false;
     //PLEASE CHANGE TO FILE PATH OF AccountsDB IN YOUR DEVICE, THANK YOU <3
-    String directPathToDb = "C:\\Users\\jyroa\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
+    String directPathToDb = "C:\\Users\\User\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
     SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
     
     private static int attempts = 0;
@@ -138,11 +138,5 @@ public class LoginSystem {
         }
         return users;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LoginSystem().openLogin());
-    }
-    
-    
 
 }
