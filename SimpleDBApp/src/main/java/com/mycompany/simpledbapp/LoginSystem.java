@@ -12,8 +12,10 @@ import javax.swing.*;
 
 public class LoginSystem {
     static boolean loginSuccess = false;
+    static boolean usernameFound = false;
+    static boolean wrongPassword = false;
     //PLEASE CHANGE TO FILE PATH OF AccountsDB IN YOUR DEVICE, THANK YOU <3
-    String directPathToDb = "C:\\Users\\Niko\\Downloads\\ICS2609_MP1-main\\ICS2609_MP1-main\\SimpleDBApp\\AccountsDB";
+    String directPathToDb = "C:\\Users\\jyroa\\ICS2609_MP1\\SimpleDBApp\\AccountsDB";
     SimpleDBApp jdbc = new SimpleDBApp("root", "root", directPathToDb);
     
     private static int attempts = 0;
@@ -62,6 +64,8 @@ public class LoginSystem {
 
     private void validateLogin(String username, String password) {
         loginSuccess = false; 
+        usernameFound = false;
+        wrongPassword = false;
         String userRole = null; 
 
         try {
@@ -70,11 +74,17 @@ public class LoginSystem {
             while (rs.next()) {
                 String dbUsername = rs.getString("username");
                 String dbPassword = rs.getString("password");
-
-                if (dbUsername.equals(username) && dbPassword.equals(password)) {
-                    loginSuccess = true;
-                    userRole = rs.getString("user_role");
-                    break;
+                
+                if (dbUsername.equals(username)) {
+                    usernameFound = true;
+                    if (dbPassword.equals(password)) {
+                        loginSuccess = true;
+                        userRole = rs.getString("user_role");
+                        break;
+                    }
+                    else {
+                        wrongPassword = true;
+                    }
                 }
             }
 
@@ -93,8 +103,10 @@ public class LoginSystem {
                 attempts++; 
                 if (attempts >= 3) {
                     forceClose(); 
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Login Failed! Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!usernameFound) {
+                    JOptionPane.showMessageDialog(frame, "Login Failed! Incorrect username.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (wrongPassword) {
+                   JOptionPane.showMessageDialog(frame, "Login Failed! Incorrect password.", "Error", JOptionPane.ERROR_MESSAGE); 
                 }
             }
         } catch (SQLException e) {
